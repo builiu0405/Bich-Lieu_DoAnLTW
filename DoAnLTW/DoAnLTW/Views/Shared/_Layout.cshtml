@@ -1,0 +1,519 @@
+﻿@using DoAnLTW.Extensions
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FastFood Delight</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon">
+    @Html.AntiForgeryToken()
+
+    <style>
+        /* CSS CHUNG CHO LAYOUT (HEADER, NAV, FOOTER, BODY) */
+        body {
+            background-color: #FFFFFF;
+            color: #333333;
+            font-family: 'Roboto', sans-serif; /* Áp dụng font Roboto cho toàn bộ body */
+        }
+
+        /* --- Thanh thông báo trên cùng (notification-bar) --- */
+        .notification-bar {
+            background-color: #FFD580;
+            color: #333333;
+            font-weight: 500;
+            padding: 5px 0;
+            overflow: hidden; /* Quan trọng: Ẩn phần tràn ra ngoài */
+            position: relative; /* Đặt vị trí tương đối để animation hoạt động */
+        }
+
+        .notification-slider {
+            display: flex; /* Sử dụng flexbox cho container của các slide */
+            width: max-content; /* Đảm bảo nó rộng đủ để chứa tất cả các slide */
+            animation: slideNotifications 20s linear infinite; /* Điều chỉnh thời gian và tốc độ */
+        }
+
+        .notification-slides {
+            display: flex; /* Đảm bảo các slide nằm ngang */
+            align-items: center;
+            white-space: nowrap; /* Giữ văn bản trong các slide không bị ngắt dòng */
+        }
+
+        .notification-slide {
+            padding: 0 30px; /* Thêm khoảng cách lớn hơn giữa các thông báo */
+            flex-shrink: 0; /* Ngăn không cho các slide bị co lại */
+            font-size: 0.95rem;
+            display: flex; /* Để icon (nếu có) và text nằm trên một hàng */
+            align-items: center;
+        }
+
+        /* Animation cho thanh thông báo */
+        @@keyframes slideNotifications {
+            0%
+
+        {
+            transform: translateX(0%);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+
+        }
+
+        /* --- Navbar (thanh điều hướng) --- */
+        .navbar {
+            background-color: #FFD580;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 10px 20px; /* Thêm padding để tăng kích thước thanh */
+            display: flex; /* Sử dụng flexbox cho thanh điều hướng */
+            justify-content: center; /* Căn giữa các mục menu */
+            align-items: center;
+        }
+
+        .nav-links {
+            list-style: none; /* Loại bỏ dấu chấm */
+            padding: 0;
+            margin: 0;
+            display: flex; /* Sử dụng flexbox để các mục menu nằm ngang */
+            gap: 30px; /* Khoảng cách giữa các mục menu */
+        }
+
+            .nav-links li a {
+                color: #333333;
+                font-weight: 500;
+                text-decoration: none; /* Loại bỏ gạch chân */
+                padding: 8px 15px; /* Tăng padding cho các nút menu */
+                border-radius: 5px;
+                transition: all 0.3s ease;
+                display: flex; /* Sử dụng flex cho icon và text trong link */
+                align-items: center;
+                gap: 8px; /* Khoảng cách giữa icon và text */
+                white-space: nowrap; /* Giữ link trên một dòng */
+            }
+
+                .nav-links li a:hover {
+                    color: #FFFFFF;
+                    background-color: #FFA500;
+                    transform: translateY(-2px);
+                }
+
+        .hamburger {
+            display: none; /* Ẩn hamburger mặc định, chỉ hiển thị trên mobile */
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #333333;
+        }
+
+        /* --- Header chính (logo, tìm kiếm, giỏ hàng/đăng nhập) --- */
+        .header-main {
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #EEEEEE;
+            padding: 15px 20px; /* Tăng padding */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .header-main .logo img {
+                height: 60px; /* Tăng kích thước logo */
+            }
+
+            .header-main .search {
+                flex-grow: 1;
+                margin: 0 30px; /* Tăng khoảng cách margin */
+            }
+
+                .header-main .search form {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .header-main .search input {
+                    border: 2px solid #FFD580;
+                    border-radius: 25px;
+                    padding: 12px 25px; /* Tăng padding input */
+                    width: 100%;
+                    font-size: 1rem;
+                }
+
+                .header-main .search button {
+                    background-color: #FF8C00;
+                    color: #FFFFFF;
+                    border: none;
+                    border-radius: 25px;
+                    padding: 12px 15px;
+                    margin-left: 10px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+
+                    .header-main .search button:hover {
+                        background-color: #FFA500;
+                        transform: translateY(-2px);
+                    }
+
+            .header-main .search-suggest {
+                margin-top: 5px;
+                display: flex; /* Hiển thị các gợi ý trên một dòng */
+                flex-wrap: wrap; /* Cho phép các gợi ý xuống dòng nếu không đủ chỗ */
+                gap: 10px; /* Khoảng cách giữa các gợi ý */
+                font-size: 0.9rem;
+            }
+
+                .header-main .search-suggest strong {
+                    white-space: nowrap;
+                }
+
+                .header-main .search-suggest a {
+                    color: #FF8C00;
+                    text-decoration: none;
+                    white-space: nowrap; /* Giữ mỗi gợi ý trên một dòng */
+                }
+
+                    .header-main .search-suggest a:hover {
+                        text-decoration: underline;
+                    }
+
+        .user-options {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Khoảng cách giữa giỏ hàng và đăng nhập */
+        }
+
+        .cart-icon, .login-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px; /* Tăng padding nút */
+            background-color: #FF8C00;
+            color: #FFFFFF;
+            border-radius: 25px;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+            .cart-icon:hover, .login-btn:hover {
+                background-color: #FFA500;
+                transform: translateY(-2px);
+            }
+
+            .cart-icon .cart-count {
+                background-color: #FFFFFF;
+                color: #FF8C00;
+                border-radius: 50%;
+                width: 25px; /* Tăng kích thước số lượng trong giỏ hàng */
+                height: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 8px; /* Tăng khoảng cách */
+                font-size: 0.9rem;
+                font-weight: bold;
+            }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: #FFD580;
+            color: #333333;
+            padding: 30px 20px;
+            margin-top: 50px; /* Tăng margin-top */
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            display: flex; /* Sử dụng flexbox cho footer */
+            justify-content: space-around; /* Phân bổ đều các cột */
+            flex-wrap: wrap; /* Cho phép các cột xuống dòng trên màn hình nhỏ */
+            gap: 20px; /* Khoảng cách giữa các cột footer */
+            text-align: center; /* Căn giữa nội dung trong mỗi cột */
+        }
+
+        .footer-column {
+            flex-basis: 28%; /* Đặt kích thước cơ sở cho mỗi cột, 3 cột khoảng 30% */
+            min-width: 250px; /* Đảm bảo cột không quá nhỏ */
+            margin-bottom: 20px; /* Khoảng cách dưới cùng cho responsive */
+        }
+
+            .footer-column h4 {
+                color: #FF8C00;
+                margin-bottom: 15px;
+                font-size: 1.2rem;
+                font-weight: 700;
+            }
+
+            .footer-column p {
+                margin-bottom: 8px; /* Tăng khoảng cách giữa các dòng */
+                font-size: 0.95rem;
+                display: flex; /* Sử dụng flex để icon và text cùng hàng */
+                align-items: center;
+                justify-content: center; /* Căn giữa nội dung */
+            }
+
+            .footer-column i {
+                margin-right: 8px;
+                color: #FF8C00; /* Màu icon */
+            }
+
+        /* Toast Notification (dùng cho thông báo thêm giỏ hàng) */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            display: none; /* Ẩn mặc định, hiển thị bằng JavaScript */
+        }
+
+            .toast.success {
+                background-color: #4caf50;
+                color: white;
+            }
+
+            .toast.error {
+                background-color: #f44336;
+                color: white;
+            }
+
+        /* Responsive adjustments */
+        @@media (max-width: 992px) {
+            .header-main .search
+
+        {
+            margin: 0 15px;
+        }
+
+        .user-options {
+            gap: 10px;
+        }
+
+        .cart-icon, .login-btn {
+            padding: 10px 18px;
+            font-size: 0.9rem;
+        }
+
+            .cart-icon .cart-count {
+                width: 20px;
+                height: 20px;
+            }
+
+        .nav-links {
+            gap: 15px;
+        }
+
+            .nav-links li a {
+                padding: 6px 12px;
+                font-size: 0.95rem;
+            }
+
+        .footer-column {
+            flex-basis: 45%; /* 2 cột trên màn hình vừa */
+        }
+
+        }
+
+        @@media (max-width: 768px) {
+            .notification-bar
+
+        {
+            overflow: hidden; /* Vẫn ẩn phần tràn */
+            text-align: center;
+        }
+
+        .notification-slider {
+            animation: none; /* Tắt animation trên mobile */
+            width: 100%; /* Chiếm toàn bộ chiều rộng */
+            display: block;
+            white-space: normal; /* Cho phép văn bản xuống dòng trên mobile */
+        }
+
+        .notification-slides {
+            flex-direction: column; /* Xếp chồng các thông báo trên mobile */
+            align-items: center;
+            white-space: normal; /* Cho phép văn bản xuống dòng */
+        }
+
+        .notification-slide {
+            padding: 5px 10px; /* Giảm padding trên mobile */
+            justify-content: center; /* Căn giữa nội dung slide */
+        }
+
+        .header-main {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+            .header-main .logo {
+                order: 1;
+                flex-basis: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .header-main .search {
+                order: 3; /* Di chuyển ô tìm kiếm xuống dưới logo và user options */
+                flex-basis: 90%; /* Chiếm gần hết chiều rộng */
+                margin: 10px 0;
+            }
+
+        .user-options {
+            order: 2;
+            margin-top: 10px;
+            justify-content: center; /* Căn giữa các nút */
+            flex-basis: 100%;
+        }
+
+        .navbar {
+            justify-content: flex-start; /* Căn trái các mục menu */
+            padding: 10px;
+        }
+
+        .hamburger {
+            display: block; /* Hiển thị hamburger menu */
+            margin-right: 15px;
+        }
+
+        .nav-links {
+            display: none; /* Ẩn menu mặc định */
+            flex-direction: column; /* Xếp chồng các mục menu */
+            width: 100%;
+            background-color: #FFD580;
+            position: absolute;
+            left: 0;
+            top: 100%; /* Đặt ngay dưới navbar */
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            gap: 5px; /* Giảm khoảng cách giữa các mục */
+            text-align: center;
+        }
+
+            .nav-links.active {
+                display: flex; /* Hiện menu khi active */
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+                .nav-links li a {
+                    display: block; /* Đảm bảo link chiếm toàn bộ chiều rộng */
+                    padding: 10px 20px;
+                    justify-content: flex-start; /* Căn trái nội dung link */
+                }
+
+        .footer {
+            flex-direction: column; /* Xếp chồng các cột trên mobile */
+            align-items: center; /* Căn giữa các cột */
+        }
+
+        .footer-column {
+            flex-basis: 90%; /* Mỗi cột chiếm gần hết chiều rộng */
+            margin-bottom: 15px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <section class="notification-bar">
+            <div class="notification-slider">
+                <div class="notification-slides">
+                    <div class="notification-slide">NGUYÊN LIỆU TƯƠI NGON</div>
+                    <div class="notification-slide">GIAO HÀNG SIÊU TỐC</div>
+                    <div class="notification-slide">HOTLINE 1900.8888</div>
+                    <div class="notification-slide">MIỄN PHÍ VẬN CHUYỂN ĐƠN TRÊN 100K</div>
+                    <div class="notification-slide">NGUYÊN LIỆU TƯƠI NGON</div>
+                    <div class="notification-slide">GIAO HÀNG SIÊU TỐC</div>
+                    <div class="notification-slide">HOTLINE 1900.8888</div>
+                    <div class="notification-slide">MIỄN PHÍ VẬN CHUYỂN ĐƠN TRÊN 100K</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="header-main">
+            <div class="logo">
+                <a asp-controller="Home" asp-action="Index" asp-route-area=""><img src="~/images/logo-fastfood.png" alt="Logo FastFood"></a>
+            </div>
+
+            <div class="search">
+                <form action="/Product/Filter" method="get">
+                    <input type="text" class="form-control" id="searchQuery" name="q" placeholder="Hôm nay bạn muốn ăn gì?">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                <div class="search-suggest">
+                    <strong>Món ăn nổi bật:</strong>
+                    <a href="/Product/Display/BurgerKing">Burger Gà Giòn</a>
+                    <a href="/Product/Display/PizzaHawaiian">Pizza Hải Sản</a>
+                    <a href="/Product/Display/FriedChicken">Gà Rán Khổng Lồ</a>
+                    <a href="/Product/Display/SpaghettiBolognese">Mì Ý Sốt Bò</a>
+                </div>
+            </div>
+
+            <div class="user-options">
+                <a href="/ShoppingCart/Index" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> <span class="cart-count">@((Context.Session.GetObjectFromJson<ShoppingCart>("Cart")?.Items.Count ?? 0))</span>
+                </a>
+                <partial name="_LoginPartial" />
+            </div>
+        </section>
+        <nav class="navbar">
+            <div class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">☰</div>
+            <ul class="nav-links">
+                <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Trang chủ</a></li>
+                <li><a asp-controller="Product" asp-action="Index"><i class="fas fa-utensils"></i> Thực đơn</a></li>
+                <li><a asp-controller="Order" asp-action="Index"><i class="fas fa-box-open"></i> Đơn hàng của tôi</a></li>
+                <li><a asp-controller="Chat" asp-action="UserChat"><i class="fas fa-headset"></i> Hỗ trợ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container main-content">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <div id="chatbot-root"></div>
+
+    <footer class="footer">
+        <div class="footer-column">
+            <h4>Thông tin liên hệ</h4>
+            <p><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận XYZ, TP.HCM</p>
+            <p><i class="fas fa-phone-alt"></i> 1900.8888</p>
+            <p><i class="fas fa-envelope"></i> info@fastfooddelight.com</p>
+        </div>
+        <div class="footer-column">
+            <h4>Giờ mở cửa</h4>
+            <p><i class="fas fa-clock"></i> Thứ 2 - Thứ 6: 09:00 - 22:00</p>
+            <p><i class="fas fa-clock"></i> Thứ 7 - Chủ nhật: 10:00 - 23:00</p>
+        </div>
+        <div class="footer-column">
+            <h4>Theo dõi chúng tôi</h4>
+            <p><i class="fab fa-facebook"></i> Facebook</p>
+            <p><i class="fab fa-instagram"></i> Instagram</p>
+            <p><i class="fab fa-twitter"></i> Twitter</p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="~/chatbot/css/main.2382591b.css" />
+    <script src="~/chatbot/js/main.09066911.js"></script>
+    <script>
+        document.getElementById('hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

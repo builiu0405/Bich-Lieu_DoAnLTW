@@ -1,0 +1,276 @@
+﻿@model DoAnLTW.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Chỉnh sửa người dùng";
+    Layout = "_LayoutAdmin";
+    var userRoles = (IList<string>)ViewBag.UserRoles;
+    var allRoles = (List<Microsoft.AspNetCore.Identity.IdentityRole>)ViewBag.AllRoles;
+}
+
+<link rel="stylesheet" href="~/css/categoryView.css" asp-append-version="true" />
+
+<style>
+    /* Root Variables for Consistent Theming */
+    :root {
+        --primary-color: #2563eb; /* Soft blue */
+        --accent-color: #f59e0b; /* Warm amber */
+        --background-color: #f3f4f6; /* Light gray background */
+        --card-background: #ffffff;
+        --text-dark: #1f2937; /* Dark gray for text */
+        --text-muted: #6b7280; /* Muted text */
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --border-radius: 8px;
+        --transition: all 0.2s ease-in-out;
+    }
+
+    /* Container */
+    .container-fluid {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: var(--border-radius);
+    }
+
+    /* Card Styling */
+    .card {
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-header {
+        background: var(--card-background);
+        border-bottom: 1px solid #e5e7eb;
+        padding: 1.25rem;
+    }
+
+        .card-header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Form Styling */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+    .form-control {
+        border-radius: var(--border-radius);
+        border: 1px solid #d1d5db;
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        color: var(--text-dark);
+        transition: var(--transition);
+    }
+
+        .form-control:disabled {
+            background: #e5e7eb;
+            cursor: not-allowed;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+    .text-danger {
+        font-size: 0.75rem;
+        color: #dc2626;
+        margin-top: 0.25rem;
+    }
+
+    /* Checkbox Styling */
+    .form-check {
+        margin-bottom: 0.5rem;
+    }
+
+    .form-check-input {
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        font-size: 0.875rem;
+        color: var(--text-dark);
+        margin-left: 0.5rem;
+    }
+
+    /* Button Styling */
+    .btn {
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary {
+        background: var(--accent-color);
+        border: none;
+        color: #fff;
+    }
+
+        .btn-primary:hover {
+            background: #d97706; /* Darker amber */
+            transform: translateY(-2px);
+        }
+
+    .btn-secondary {
+        background: transparent;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .container-fluid
+
+    {
+        padding: 1rem;
+    }
+
+    .card-header h1 {
+        font-size: 1.125rem;
+    }
+
+    .form-group label {
+        font-size: 0.75rem;
+    }
+
+    .form-control,
+    .form-check-label {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-group .btn + .btn {
+        margin-top: 0.5rem;
+    }
+
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h1><i class="fas fa-user-edit"></i> Chỉnh sửa người dùng</h1>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post" id="userEditForm">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="UserName">Tên người dùng:</label>
+                    <input asp-for="UserName" class="form-control" disabled />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email">Email:</label>
+                    <input asp-for="Email" class="form-control" disabled />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FullName">Tên đầy đủ:</label>
+                    <input asp-for="FullName" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Vai trò:</label>
+                    @foreach (var role in allRoles)
+                    {
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   name="selectedRoles"
+                                   value="@role.Name"
+                                   id="@role.Name"
+                                   @(userRoles.Contains(role.Name) ? "checked" : "")>
+                            <label class="form-check-label" for="@role.Name">@role.Name</label>
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+                    <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-times"></i> Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // Handle form submission
+            $('#userEditForm').submit(function (e) {
+                e.preventDefault();
+
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(function () {
+                                    window.location.href = '@Url.Action("Index")';
+                                }, 1500);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Đã xảy ra lỗi khi cập nhật người dùng');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

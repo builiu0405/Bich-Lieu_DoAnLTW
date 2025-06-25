@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<link rel="stylesheet" href="~/css/loginPartial.css" asp-append-version="true" />
+<nav class="nav-menu">
+    <ul class="nav-list">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+            {
+                <li class="nav-item">
+                    <a class="nav-link nav-account" href="/Admin/Home/Index" title="Dashboard">
+                        <i class="fas fa-tachometer-alt" style="color: #FF8C00;"></i> DashBoard
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link nav-account" asp-area="Identity" asp-page="/Account/Manage/Index" title="Quản lý tài khoản">
+                        <i class="fas fa-user" style="color: #FF8C00;"></i> Tài khoản
+                    </a>
+                </li>
+            }
+            <li class="nav-item">
+                <form class="logout-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link nav-button nav-logout rounded-pill px-3 py-2" style="background-color: #FF8C00; color: #FFFFFF; border: none;">
+                        <i class="fas fa-sign-out-alt me-1" style="color: #FFFFFF;"></i> Đăng xuất
+                    </button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link nav-auth nav-register rounded-pill px-3 py-2" asp-area="Identity" asp-page="/Account/Register" style="background-color: #FFD580; color: #333333;">
+                    <i class="fas fa-user-plus me-1" style="color: #FF8C00;"></i> Đăng ký
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link nav-auth nav-login rounded-pill px-3 py-2" asp-area="Identity" asp-page="/Account/Login" style="background-color: #FF8C00; color: #FFFFFF;">
+                    <i class="fas fa-sign-in-alt me-1" style="color: #FFFFFF;"></i> Đăng nhập
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<style>
+    .nav-menu {
+        padding: 10px 20px;
+        background-color: #FFFFFF;
+        border-bottom: 1px solid #EEEEEE;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .nav-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .nav-item {
+        margin-left: 15px;
+    }
+
+    .nav-link {
+        text-decoration: none;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-account {
+        color: #333333;
+        padding: 8px 15px;
+        border-radius: 5px;
+    }
+
+        .nav-account:hover {
+            color: #FF8C00;
+            background-color: #F8F9FA;
+            transform: translateY(-2px);
+        }
+
+    .nav-auth {
+        padding: 8px 15px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        .nav-auth:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+    .nav-logout {
+        cursor: pointer;
+        padding: 8px 15px;
+    }
+
+        .nav-logout:hover {
+            background-color: #FFA500;
+            transform: translateY(-2px);
+        }
+    media (max-width: 768px) {
+        .nav-list
+
+    {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+    }
+
+    .nav-item {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .nav-link, .nav-auth {
+        width: 100%;
+        text-align: center;
+    }
+
+    }
+</style>

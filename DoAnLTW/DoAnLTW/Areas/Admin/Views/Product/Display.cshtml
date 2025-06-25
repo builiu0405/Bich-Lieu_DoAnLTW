@@ -1,0 +1,353 @@
+﻿@model DoAnLTW.Models.Product
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+    Layout = "_LayoutAdmin";
+}
+
+<style>
+    /* Root Variables for Consistent Theming */
+    :root {
+        --primary-color: #2563eb; /* Soft blue */
+        --accent-color: #f59e0b; /* Warm amber */
+        --background-color: #f3f4f6; /* Light gray background */
+        --card-background: #ffffff;
+        --text-dark: #1f2937; /* Dark gray for text */
+        --text-muted: #6b7280; /* Muted text */
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --border-radius: 8px;
+        --transition: all 0.2s ease-in-out;
+    }
+
+    /* Product Detail Page */
+    .product-detail-page {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: var(--border-radius);
+    }
+
+    /* Page Title */
+    .page-title {
+        font-size: 1.875rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Product Layout */
+    .product-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Image Section */
+    .image-section {
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+    }
+
+    .main-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: contain;
+        border-radius: var(--border-radius);
+        margin-bottom: 1rem;
+        transition: var(--transition);
+    }
+
+    .image-gallery {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: var(--transition);
+    }
+
+        .thumbnail:hover {
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+    /* Info Section */
+    .info-section {
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+    }
+
+        .info-section dl {
+            margin: 0;
+        }
+
+        .info-section dt {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-section dd {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-section .text-muted {
+            font-style: italic;
+            color: var(--text-muted) !important;
+        }
+
+    .button-container {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .update-btn, .back-btn {
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        transition: var(--transition);
+    }
+
+    .update-btn {
+        background: var(--accent-color);
+        border: none;
+        color: #fff;
+    }
+
+        .update-btn:hover {
+            background: #d97706; /* Darker amber */
+            transform: translateY(-2px);
+        }
+
+    .back-btn {
+        background: transparent;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+    /* Specifications Section */
+    .specifications-section {
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+    }
+
+    .specifications-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .specifications-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .specifications-table thead th {
+            background: #f9fafb;
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .specifications-table tbody td {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .specifications-table tbody tr:hover {
+            background: #f0f7ff;
+        }
+
+    .specifications-section .text-muted {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .product-detail-page
+
+    {
+        padding: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .product-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .main-image {
+        max-height: 300px;
+    }
+
+    .thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+
+    .info-section dt,
+    .info-section dd {
+        font-size: 0.75rem;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .update-btn, .back-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .specifications-title {
+        font-size: 1.125rem;
+    }
+
+    .specifications-table thead th,
+    .specifications-table tbody td {
+        font-size: 0.75rem;
+    }
+
+    }
+</style>
+
+<div class="product-detail-page">
+    <h1 class="page-title"><i class="fas fa-info-circle"></i> Chi tiết sản phẩm</h1>
+
+    <div class="product-layout">
+        <!-- Image Section -->
+        <div class="image-section">
+            <img id="mainImage" src="@Model.ImageUrl" class="main-image" alt="@Model.Name" />
+            @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+            {
+                <div class="image-gallery">
+                    @foreach (var image in Model.ImageUrls)
+                    {
+                        <img src="@image.ImageUrl" class="thumbnail" alt="@Model.Name" onclick="changeMainImage(this)" />
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <dl class="row">
+                <dt class="col-sm-4">Tên sản phẩm</dt>
+                <dd class="col-sm-8">@Model.Name</dd>
+
+                <dt class="col-sm-4">Giá</dt>
+                <dd class="col-sm-8">@Model.Price.ToString("N0") VNĐ</dd>
+
+                <dt class="col-sm-4">Phần trăm khuyến mãi</dt>
+                <dd class="col-sm-8">@(Model.Discount?.ToString("N0") + "%" ?? "<span class='text-muted'>Không có</span>")</dd>
+
+                <dt class="col-sm-4">Số lượng hàng</dt>
+                <dd class="col-sm-8">@Model.Stock</dd>
+
+                <dt class="col-sm-4">Thương hiệu</dt>
+                <dd class="col-sm-8">@(Model.Brand?.Name ?? "<span class='text-muted'>Chưa có</span>")</dd>
+
+                <dt class="col-sm-4">Mô tả</dt>
+                <dd class="col-sm-8">@Html.Raw(Model.Description)</dd>
+            </dl>
+            <div class="button-container">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn update-btn">
+                    <i class="fas fa-edit"></i> Chỉnh sửa
+                </a>
+                <a asp-action="Index" class="btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specifications Section -->
+    <div class="specifications-section">
+        <h3 class="specifications-title"><i class="fas fa-cogs"></i> Thông số kỹ thuật</h3>
+        @if (Model.ProductSpecifications != null && Model.ProductSpecifications.Any())
+        {
+            <table class="specifications-table">
+                <thead>
+                    <tr>
+                        <th>Tên thông số</th>
+                        <th>Giá trị</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var spec in Model.ProductSpecifications)
+                    {
+                        <tr>
+                            <td>@spec.Key</td>
+                            <td>@spec.Value</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Không có thông số kỹ thuật nào.</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function changeMainImage(thumbnail) {
+            var mainImage = document.getElementById("mainImage");
+            if (mainImage) {
+                mainImage.src = thumbnail.src;
+            }
+        }
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

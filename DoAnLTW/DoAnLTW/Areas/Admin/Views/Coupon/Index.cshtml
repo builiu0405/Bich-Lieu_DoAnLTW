@@ -1,0 +1,338 @@
+@model IEnumerable<DoAnLTW.Models.Coupon>
+
+@{
+    ViewData["Title"] = "Quản lý mã giảm giá";
+    Layout = "_LayoutAdmin";
+}
+
+<style>
+    /* Root Variables for Consistent Theming */
+    :root {
+        --primary-color: #2563eb; /* Soft blue */
+        --accent-color: #f59e0b; /* Warm amber */
+        --background-color: #f3f4f6; /* Light gray background */
+        --card-background: #ffffff;
+        --text-dark: #1f2937; /* Dark gray for text */
+        --text-muted: #6b7280; /* Muted text */
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --border-radius: 8px;
+        --transition: all 0.2s ease-in-out;
+    }
+
+    /* Container */
+    .container-fluid {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: var(--border-radius);
+    }
+
+    /* Card Styling */
+    .card {
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-header {
+        background: var(--card-background);
+        border-bottom: 1px solid #e5e7eb;
+        padding: 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .card-header h6 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header .btn-primary {
+            background: var(--accent-color);
+            border: none;
+            color: #fff;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 1.25rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+            .card-header .btn-primary:hover {
+                background: #d97706; /* Darker amber */
+                transform: translateY(-2px);
+            }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Table Styling */
+    .table-responsive {
+        margin-top: 0;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+
+        .table thead th {
+            background: #f9fafb;
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table tbody tr {
+            transition: var(--transition);
+        }
+
+            .table tbody tr:hover {
+                background: #f0f7ff;
+            }
+
+        .table tbody td {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: middle;
+        }
+
+    /* Custom Switch */
+    .custom-switch .custom-control-label {
+        color: var(--text-dark);
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+
+    .custom-switch .custom-control-input:checked ~ .custom-control-label {
+        color: #16a34a; /* Green for active state */
+    }
+
+    .custom-switch .custom-control-input {
+        cursor: pointer;
+    }
+
+    /* Buttons */
+    .btn-sm {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        border: 1px solid;
+        transition: var(--transition);
+    }
+
+    .btn-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+        .btn-primary:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+    .btn-danger {
+        color: #dc2626;
+        border-color: #dc2626;
+    }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .container-fluid
+
+    {
+        padding: 1rem;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+        .card-header h6 {
+            font-size: 1.125rem;
+        }
+
+        .card-header .btn-primary {
+            width: 100%;
+            justify-content: center;
+        }
+
+    .table thead {
+        display: none; /* Hide headers on small screens */
+    }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: var(--border-radius);
+    }
+
+    .table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        border-bottom: none;
+    }
+
+        .table tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--text-muted);
+            width: 40%;
+        }
+
+        .table tbody td:last-child {
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h6><i class="fas fa-ticket-alt"></i> Danh sách mã giảm giá</h6>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Thêm mã giảm giá
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Mã giảm giá</th>
+                            <th>Phần trăm giảm</th>
+                            <th>Ngày hết hạn</th>
+                            <th>Trạng thái</th>
+                            <th>Số lần sử dụng</th>
+                            <th>Giới hạn sử dụng</th>
+                            <th>Giá trị tối thiểu</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td data-label="Mã giảm giá">@item.Code</td>
+                                    <td data-label="Phần trăm giảm">@item.DiscountPercentage%</td>
+                                    <td data-label="Ngày hết hạn">@item.ExpiryDate.ToString("dd/MM/yyyy")</td>
+                                    <td data-label="Trạng thái">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input status-toggle"
+                                                   id="status-@item.Id" @(item.IsActive ? "checked" : "")
+                                                   data-id="@item.Id">
+                                            <label class="custom-control-label" for="status-@item.Id">
+                                                @(item.IsActive ? "Đang hoạt động" : "Đã tắt")
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td data-label="Số lần sử dụng">@item.UsageCount</td>
+                                    <td data-label="Giới hạn sử dụng">@(item.UsageLimit.HasValue? item.UsageLimit.ToString() : "Không giới hạn")</td>
+                                    <td data-label="Giá trị tối thiểu">@(item.MinimumOrderAmount.HasValue? item.MinimumOrderAmount.Value.ToString("N0") + "đ" : "Không yêu cầu")</td>
+                                    <td data-label="Thao tác">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary" title="Sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-controller="Coupon" class="btn btn-sm btn-danger delete-coupon" data-id="@item.Id" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-muted" style="text-align: center; padding: 2rem;">
+                                    Không có mã giảm giá nào để hiển thị.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            $('#dataTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Vietnamese.json"
+                }
+            });
+
+            // Handle status toggle
+            $('.status-toggle').change(function () {
+                var id = $(this).data('id');
+                $.post('@Url.Action("ToggleStatus", "Coupon")/' + id, function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                });
+            });
+
+            // Handle delete
+            $('.delete-coupon').click(function () {
+                var id = $(this).data('id');
+                if (confirm('Bạn có chắc chắn muốn xóa mã giảm giá này?')) {
+                    $.post('@Url.Action("Delete", "Coupon")/' + id, function (data) {
+                        if (data.success) {
+                            toastr.success(data.message);
+                            location.reload();
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

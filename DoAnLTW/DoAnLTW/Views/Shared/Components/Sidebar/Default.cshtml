@@ -1,0 +1,145 @@
+
+@{
+    var categories = ViewBag.Categories as IEnumerable<DoAnLTW.Models.Category>;
+    var brands = ViewBag.Brands as IEnumerable<DoAnLTW.Models.Brand>;
+}
+
+<aside class="sidebar">
+    <div class="sidebar-section">
+        <h3 class="sidebar-title" onclick="toggleSection('categories')">Danh mục <i class="fas fa-chevron-down"></i></h3>
+        <div id="categories-content" class="section-content">
+            <ul class="category-list">
+                @if (categories != null)
+                {
+                    @foreach (var category in categories)
+                    {
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.Id">
+                                <i class="fas fa-folder"></i>
+                                <span>@category.Name</span>
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="sidebar-section">
+        <h3 class="sidebar-title" onclick="toggleSection('brands')">Chi Nhánh <i class="fas fa-chevron-down"></i></h3>
+        <div id="brands-content" class="section-content">
+            <ul class="brand-list">
+                @if (brands != null)
+                {
+                    @foreach (var brand in brands)
+                    {
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-brandId="@brand.Id">
+                                <div class="brand-image">
+                                    <img src="@brand.LogoUrl" alt="@brand.Name" onerror="this.src='/images/default-brand.png'">
+                                </div>
+                                <span class="brand-name">@brand.Name</span>
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="sidebar-section">
+        <h3 class="sidebar-title" onclick="toggleSection('filters')">Bộ lọc <i class="fas fa-chevron-down"></i></h3>
+        <div id="filters-content" class="section-content">
+            <div class="filter-group">
+                <h4>Khoảng giá</h4>
+                <div class="price-range">
+                    <input type="number" class="form-control mb-2" placeholder="Giá tối thiểu" id="minPrice">
+                    <input type="number" class="form-control" placeholder="Giá tối đa" id="maxPrice">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>Sắp xếp</h4>
+                <select class="form-select" id="sortOrder">
+                    <option value="">Mặc định</option>
+                    <option value="price_asc">Giá tăng dần</option>
+                    <option value="price_desc">Giá giảm dần</option>
+                    <option value="name_asc">Tên A-Z</option>
+                    <option value="name_desc">Tên Z-A</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <h4>Trạng thái</h4>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="inStock">
+                    <label class="form-check-label" for="inStock">
+                        Còn hàng
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="hasDiscount">
+                    <label class="form-check-label" for="hasDiscount">
+                        Có giảm giá
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn btn-primary w-100 mt-3" id="applyFilters">
+                <i class="fas fa-filter"></i> Áp dụng bộ lọc
+            </button>
+        </div>
+    </div>
+</aside>
+
+<script>
+    // Hàm này được đặt ở đây để chắc chắn rằng nó được load cùng với Sidebar
+    function toggleSection(sectionId) {
+        const content = document.getElementById(`${sectionId}-content`);
+        const chevron = content.previousElementSibling.querySelector('i');
+
+        if (content.classList.contains("active")) {
+            content.classList.remove("active");
+            chevron.classList.remove('fa-chevron-up');
+            chevron.classList.add('fa-chevron-down');
+        } else {
+            // Đóng tất cả các section khác trước khi mở cái mới
+            document.querySelectorAll('.sidebar-section .section-content.active').forEach(openContent => {
+                openContent.classList.remove('active');
+                openContent.previousElementSibling.querySelector('i').classList.remove('fa-chevron-up');
+                openContent.previousElementSibling.querySelector('i').classList.add('fa-chevron-down');
+            });
+
+            // Mở section hiện tại
+            content.classList.add("active");
+            chevron.classList.remove('fa-chevron-down');
+            chevron.classList.add('fa-chevron-up');
+        }
+    }
+
+    // Mở section đầu tiên mặc định khi Sidebar được load
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoriesContent = document.getElementById('categories-content');
+        if (categoriesContent && !categoriesContent.classList.contains('active')) {
+            toggleSection('categories');
+        }
+
+        // Apply filters functionality
+        document.getElementById('applyFilters').addEventListener('click', function() {
+            const minPrice = document.getElementById('minPrice').value;
+            const maxPrice = document.getElementById('maxPrice').value;
+            const sortOrder = document.getElementById('sortOrder').value;
+            const inStock = document.getElementById('inStock').checked;
+            const hasDiscount = document.getElementById('hasDiscount').checked;
+
+            let url = '/Product/Index?'; // Giả sử trang sản phẩm của bạn là /Product/Index
+            if (minPrice) url += `minPrice=${minPrice}&`;
+            if (maxPrice) url += `maxPrice=${maxPrice}&`;
+            if (sortOrder) url += `sortOrder=${sortOrder}&`;
+            if (inStock) url += `inStock=true&`;
+            if (hasDiscount) url += `hasDiscount=true&`;
+
+            window.location.href = url.slice(0, -1); // Remove trailing '&' if any
+        });
+    });
+</script>

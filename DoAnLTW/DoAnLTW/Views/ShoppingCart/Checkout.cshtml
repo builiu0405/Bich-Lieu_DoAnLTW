@@ -1,0 +1,181 @@
+﻿@model DoAnLTW.Models.Order
+@using DoAnLTW.Extensions
+@{
+    ViewData["Title"] = "Thanh toán";
+    Layout = "_LayoutProduct";
+}
+@{
+    var cart = Context.Session.GetObjectFromJson<ShoppingCart>("Cart");
+    var selectedProductIds = Context.Session.GetObjectFromJson<List<int>>("SelectedProductIds") ?? new List<int>();
+
+    var selectedItems = cart?.Items
+    .Where(i => selectedProductIds.Contains(i.ProductId))
+    .ToList() ?? new List<CartItem>();
+
+    var totalAmount = selectedItems.Sum(i => i.Price * i.Quantity);
+    var finalAmount = Model.FinalAmount > 0 ? Model.FinalAmount : totalAmount;
+}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-user"></i> Thông tin thanh toán</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Checkout" method="post" id="checkoutForm">
+                        @foreach (var detail in Model.OrderDetails)
+                        {
+                            <input type="hidden" name="selectedProductIds" value="@detail.ProductId" />
+                        }
+                        <input type="hidden" asp-for="CouponId" id="couponId" />
+                        <input type="hidden" asp-for="DiscountAmount" id="discountAmount" />
+                        <input type="hidden" asp-for="FinalAmount" id="finalAmount" value="@finalAmount" />
+                        <input type="hidden" asp-for="TotalPrice" id="totalPrice" value="@totalAmount" />
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FullName" class="form-label">Họ và tên</label>
+                                <input asp-for="FullName" class="form-control" required>
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PhoneNumber" class="form-label">Số điện thoại</label>
+                                <input asp-for="PhoneNumber" class="form-control" required>
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ShippingAddress" class="form-label">Địa chỉ</label>
+                            <textarea asp-for="ShippingAddress" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Ghi chú</label>
+                            <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phương thức thanh toán</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="PaymentMethod" id="cod" value="COD" checked>
+                                <label class="form-check-label" for="cod">
+                                    Thanh toán khi nhận hàng (COD)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="PaymentMethod" id="bank" value="Bank">
+                                <label class="form-check-label" for="bank">
+                                    Chuyển khoản ngân hàng
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Xác nhận đặt hàng
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-shopping-cart"></i> Đơn hàng</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Mã giảm giá</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="couponCode" placeholder="Nhập mã giảm giá">
+                            <button class="btn btn-outline-primary" type="button" id="applyCoupon">Áp dụng</button>
+                        </div>
+                        <div id="couponMessage" class="mt-2"></div>
+                    </div>
+
+                    @foreach (var item in selectedItems)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="mb-0">@item.Name</h6>
+                                <small class="text-muted">Số lượng: @item.Quantity</small>
+                            </div>
+                            <span>@((item.Price * item.Quantity)?.ToString("N0"))đ</span>
+                        </div>
+                    }
+                    <hr>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tạm tính:</span>
+                        <span id="subtotal">@(totalAmount?.ToString("N0"))đ</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Giảm giá:</span>
+                        <span id="discountAmountDisplay">@(Model.DiscountAmount?.ToString("N0"))đ</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Phí vận chuyển:</span>
+                        <span>Miễn phí</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <strong>Tổng cộng:</strong>
+                        <strong class="text-primary" id="totalAmount">@(finalAmount?.ToString("N0"))đ</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+            // Handle coupon application
+            $('#applyCoupon').click(function() {
+                var code = $('#couponCode').val();
+                var totalAmount = parseFloat($('#subtotal').text().replace('đ', '').replace(/,/g, ''));
+
+                $.post('@Url.Action("ValidateCoupon", "ShoppingCart")', {
+                    code: code,
+                    totalAmount: totalAmount
+                }, function(response) {
+                    if (response.success) {
+                        $('#couponMessage').html('<div class="alert alert-success">' + response.message + '</div>');
+                        $('#couponId').val(response.coupon.id);
+                        $('#discountAmount').val(response.coupon.discountAmount);
+                        $('#finalAmount').val(response.coupon.finalAmount);
+
+                        // Update display
+                        $('#discountAmountDisplay').text(response.coupon.discountAmount.toLocaleString() + 'đ');
+                        $('#totalAmount').text(response.coupon.finalAmount.toLocaleString() + 'đ');
+                    } else {
+                        $('#couponMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
+                        resetCoupon();
+                    }
+                });
+            });
+
+            function resetCoupon() {
+                $('#couponId').val('');
+                $('#discountAmount').val(0);
+                $('#finalAmount').val($('#subtotal').text().replace('đ', '').replace(/,/g, ''));
+                $('#discountAmountDisplay').text('0đ');
+                $('#totalAmount').text($('#subtotal').text());
+            }
+
+            // Ensure form submission includes coupon information
+            $('#checkoutForm').submit(function() {
+                if ($('#couponId').val() === '') {
+                    $('#discountAmount').val(0);
+                    $('#finalAmount').val($('#subtotal').text().replace('đ', '').replace(/,/g, ''));
+                }
+            });
+        });
+    </script>
+}

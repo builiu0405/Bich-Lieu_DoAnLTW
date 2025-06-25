@@ -1,0 +1,131 @@
+﻿@model DoAnLTW.Models.Brand
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Xóa thương hiệu";
+}
+<link rel="stylesheet" href="~/css/categoryView.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/button.css" asp-append-version="true" />
+<style>
+    /* CSS mới cho trang xóa */
+    .admin-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 40px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        border-top: 4px solid #e74c3c;
+    }
+
+    h2 {
+        color: #e74c3c;
+        margin-bottom: 25px;
+        font-size: 28px;
+    }
+
+    p {
+        margin: 20px 0;
+        font-size: 18px;
+        color: #555;
+    }
+
+    strong {
+        color: #2c3e50;
+    }
+
+    img {
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 5px;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .warning-icon {
+        font-size: 48px;
+        color: #e74c3c;
+        margin-bottom: 20px;
+    }
+
+    form {
+        margin-top: 30px;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 120px;
+    }
+
+    .remove-btn {
+        background: linear-gradient(to right, #e74c3c, #c0392b);
+        color: white;
+    }
+
+        .remove-btn:hover {
+            background: linear-gradient(to right, #c0392b, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+    .cancel-btn {
+        background: linear-gradient(to right, #7f8c8d, #95a5a6);
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        line-height: normal;
+    }
+
+        .cancel-btn:hover {
+            background: linear-gradient(to right, #6c7a7d, #7f8c8d);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .admin-container {
+            margin: 20px;
+            padding: 25px;
+        }
+
+        .button-group {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+
+<div class="admin-container">
+    <div class="warning-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h2>Xóa chi nhánh</h2>
+    <p>Bạn có muốn xóa <strong>@Model.Name</strong> khỏi danh sách chi nhánh?</p>
+    <p><img src="@Model.LogoUrl" alt="@Model.Name" style="max-width: 150px; height: auto;" /></p>
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="button-group">
+            <a asp-action="Index" class="btn cancel-btn">Hủy</a>
+            <button type="submit" class="btn remove-btn">Xóa</button>
+        </div>
+    </form>
+</div>

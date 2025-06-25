@@ -1,0 +1,154 @@
+﻿@model DoAnLTW.Models.Brand
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Thêm thương hiệu";
+}
+<link rel="stylesheet" href="~/css/categoryView.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/button.css" asp-append-version="true" />
+<style>
+    /* CSS nâng cấp - Không thay đổi HTML */
+    .admin-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .admin-container h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #eaeaea;
+        font-size: 28px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 16px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background-color: #f9f9f9;
+    }
+
+    .form-control:focus {
+        border-color: #3498db;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        background-color: #fff;
+    }
+
+    .text-danger {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 6px;
+        display: block;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .add-btn {
+        background: linear-gradient(to right, #27ae60, #2ecc71);
+        color: white;
+    }
+
+    .add-btn:hover {
+        background: linear-gradient(to right, #219653, #27ae60);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+    }
+
+    .cancel-btn {
+        background: linear-gradient(to right, #7f8c8d, #95a5a6);
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        line-height: normal;
+    }
+
+    .cancel-btn:hover {
+        background: linear-gradient(to right, #6c7a7d, #7f8c8d);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .admin-container {
+            margin: 20px;
+            padding: 20px;
+        }
+        
+        .button-group {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="admin-container">
+    <h2>Thêm chi nhánh</h2>
+    <form asp-action="Add" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label">Tên chi nhánh</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LogoUrl" class="control-label">Logo</label>
+            <input type="file" asp-for="LogoUrl" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="button-group">
+            <a asp-action="Index" class="btn cancel-btn">Hủy</a>
+            <button type="submit" class="btn add-btn">Thêm</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

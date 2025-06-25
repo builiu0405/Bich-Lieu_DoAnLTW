@@ -1,0 +1,203 @@
+﻿@model DoAnLTW.Models.Coupon
+
+@{
+    ViewData["Title"] = "Xóa mã giảm giá";
+    Layout = "_LayoutAdmin";
+}
+
+<style>
+    :root {
+        --primary-color: #2563eb;
+        --accent-color: #f59e0b;
+        --background-color: #f3f4f6;
+        --card-background: #ffffff;
+        --text-dark: #1f2937;
+        --text-muted: #6b7280;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --border-radius: 8px;
+        --transition: all 0.2s ease-in-out;
+    }
+
+    .container-fluid {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: var(--border-radius);
+    }
+
+    .card {
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-header {
+        background: var(--card-background);
+        border-bottom: 1px solid #e5e7eb;
+        padding: 1.25rem;
+    }
+
+        .card-header h6 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .confirmation-message {
+        font-size: 1rem;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+    }
+
+        .confirmation-message strong {
+            color: var(--primary-color);
+        }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .text-danger {
+        font-size: 0.75rem;
+        color: #dc2626;
+        margin-top: 0.25rem;
+    }
+
+    .btn {
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-danger {
+        background: #dc2626;
+        border: none;
+        color: #fff;
+    }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+
+    .btn-secondary {
+        background: transparent;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+    @@media (max-width: 768px) {
+        .container-fluid
+
+    {
+        padding: 1rem;
+    }
+
+    .card-header h6 {
+        font-size: 1.125rem;
+    }
+
+    .confirmation-message {
+        font-size: 0.875rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-group .btn + .btn {
+        margin-top: 0.5rem;
+    }
+
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h6><i class="fas fa-trash-alt"></i> Xóa mã giảm giá</h6>
+        </div>
+        <div class="card-body">
+            <form asp-action="Delete" id="couponDeleteForm" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <p class="confirmation-message">
+                        Bạn có chắc chắn muốn xóa mã giảm giá <strong>@Model.Code</strong>? Hành động này không thể hoàn tác.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Xóa</button>
+                    <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            $('#couponDeleteForm').submit(function (e) {
+                e.preventDefault();
+
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(function () {
+                                    window.location.href = '@Url.Action("Index")';
+                                }, 1500);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Đã xảy ra lỗi khi xóa mã giảm giá');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

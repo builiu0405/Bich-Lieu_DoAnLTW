@@ -1,0 +1,152 @@
+﻿@model DoAnLTW.Models.Product
+@{
+    ViewData["Title"] = "Thêm sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link rel="stylesheet" href="~/css/productAdd.css" asp-append-version="true" />
+<div class="product-form-container">
+    <h1 class="product-form-header">Thêm sản phẩm mới</h1>
+    <div class="product-form-card">
+        <div class="card-header">
+            <i class="fas fa-plus me-1"></i> Thông tin sản phẩm
+        </div>
+        <div class="card-body">
+            <form asp-action="Add" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row product-form-group">
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="control-label">Tên sản phẩm</label>
+                        <input asp-for="Name" class="form-control product-form-input" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Price" class="control-label">Giá</label>
+                        <input asp-for="Price" class="form-control product-form-input" type="number" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row product-form-group">
+                    <div class="col-md-6">
+                        <label asp-for="Discount" class="control-label">Phần trăm khuyến mãi</label>
+                        <input asp-for="Discount" class="form-control product-form-input" type="number" />
+                        <span asp-validation-for="Discount" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Stock" class="control-label">Số lượng</label>
+                        <input asp-for="Stock" class="form-control product-form-input" type="number" />
+                        <span asp-validation-for="Stock" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row product-form-group">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input asp-for="IsBestSeller" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsBestSeller" class="form-check-label">Sản phẩm bán chạy</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input asp-for="IsFeatured" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsFeatured" class="form-check-label">Sản phẩm nổi bật</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row product-form-group">
+                    <div class="col-md-6">
+                        <label asp-for="CategoryId" class="control-label">Danh mục</label>
+                        <select asp-for="CategoryId" class="form-control product-form-select" asp-items="ViewBag.Categories" required>
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="BrandId" class="control-label">Thương hiệu</label>
+                        <select asp-for="BrandId" class="form-control product-form-select" asp-items="ViewBag.Brands" required>
+                            <option value="">-- Chọn thương hiệu --</option>
+                        </select>
+                        <span asp-validation-for="BrandId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="product-form-group">
+                    <label asp-for="Description" class="control-label">Mô tả</label>
+                    <textarea asp-for="Description" class="form-control product-form-textarea" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="product-form-group">
+                    <label class="control-label">Hình ảnh chính</label>
+                    <input type="file" class="form-control product-form-file" name="ImageUrl" accept="image/*" required />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
+                </div>
+
+                <div class="product-form-group">
+                    <label class="control-label">Hình ảnh phụ</label>
+                    <input type="file" class="form-control product-form-file" name="ImageUrls" multiple accept="image/*" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrls" data-valmsg-replace="true"></span>
+                </div>
+
+                @* Thông số kĩ thuật *@
+                <div class="product-spec-container">
+                    <div class="card-header">Thông số kỹ thuật</div>
+                    <div class="card-body" id="specifications-container">
+                        <div class="row mb-3 specification-item">
+                            <div class="col-md-5">
+                                <input type="text" name="productSpecifications[0].Key" class="form-control" placeholder="Tên thông số">
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" name="productSpecifications[0].Value" class="form-control" placeholder="Giá trị">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn-danger btn-remove-spec">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-add-spec" id="btn-add-spec">Thêm thông số</button>
+                </div>
+                <div class="product-form-btn">
+                    <button type="submit" class="btn update-btn">
+                        <i class="btn-save"></i> Lưu
+                    </button>
+                    <a asp-action="Index" class="btn back-btn">
+                        <i class="btn-back"></i> Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        let specIndex = 1;
+        document.getElementById("btn-add-spec").addEventListener("click", function () {
+            let specContainer = document.getElementById("specifications-container");
+            let newSpec = document.createElement("div");
+            newSpec.classList.add("row", "mb-3", "specification-item");
+            newSpec.innerHTML = `
+                <div class="col-md-5">
+                    <input type="text" name="productSpecifications[${specIndex}].Key" class="form-control" placeholder="Tên thông số">
+                </div>
+                <div class="col-md-5">
+                    <input type="text" name="productSpecifications[${specIndex}].Value" class="form-control" placeholder="Giá trị">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn-danger btn-remove-spec">Xóa</button>
+                </div>
+            `;
+            specContainer.appendChild(newSpec);
+            specIndex++;
+        });
+
+        document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("btn-remove-spec")) {
+                event.target.parentElement.parentElement.remove();
+            }
+        });
+    </script>
+}

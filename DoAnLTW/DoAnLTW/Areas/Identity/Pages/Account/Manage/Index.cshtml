@@ -1,0 +1,150 @@
+﻿@page
+@using DoAnLTW.Areas.Identity.Pages.Account.Manage
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background-color: #fff7ed;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #7c2d12;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-card {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #7c2d12;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            color: #1f2937;
+            transition: border-color 0.2s ease-in-out;
+        }
+
+            .input-field:focus {
+                outline: none;
+                border-color: #f59e0b;
+                box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+            }
+
+            .input-field:disabled {
+                background-color: #f3f4f6;
+                cursor: not-allowed;
+            }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #f59e0b;
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+            .btn-submit:hover {
+                background-color: #d97706;
+            }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h3 class="profile-title">@ViewData["Title"]</h3>
+
+        <div class="profile-card">
+            <form id="profile-form" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="input-group">
+                    <label asp-for="Input.FullName" class="input-label">Họ và tên</label>
+                    <input asp-for="Input.FullName" class="input-field" placeholder="Nhập họ và tên" />
+                    <span asp-validation-for="Input.FullName" class="text-red-500 text-sm"></span>
+                </div>
+
+                <div class="input-group">
+                    <label asp-for="Input.Email" class="input-label">Email</label>
+                    <input asp-for="Input.Email" class="input-field" disabled />
+                </div>
+
+                <div class="input-group">
+                    <label asp-for="Input.Age" class="input-label">Ngày sinh</label>
+                    <input asp-for="Input.Age" type="date" class="input-field" />
+                    <span asp-validation-for="Input.Age" class="text-red-500 text-sm"></span>
+                </div>
+
+                <div class="input-group">
+                    <label asp-for="Input.Address" class="input-label">Địa chỉ</label>
+                    <input asp-for="Input.Address" class="input-field" placeholder="Nhập địa chỉ" />
+                    <span asp-validation-for="Input.Address" class="text-red-500 text-sm"></span>
+                </div>
+
+                <div class="input-group">
+                    <label asp-for="Input.PhoneNumber" class="input-label">Số điện thoại</label>
+                    <input asp-for="Input.PhoneNumber" class="input-field" placeholder="Nhập số điện thoại" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-red-500 text-sm"></span>
+                </div>
+
+                <button type="submit" class="btn-submit">Cập nhật</button>
+            </form>
+        </div>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>

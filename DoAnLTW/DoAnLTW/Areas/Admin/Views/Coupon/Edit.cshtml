@@ -1,0 +1,289 @@
+@model DoAnLTW.Models.Coupon
+
+@{
+    ViewData["Title"] = "Chỉnh sửa mã giảm giá";
+    Layout = "_LayoutAdmin";
+}
+
+<style>
+    /* Root Variables for Consistent Theming */
+    :root {
+        --primary-color: #2563eb; /* Soft blue */
+        --accent-color: #f59e0b; /* Warm amber */
+        --background-color: #f3f4f6; /* Light gray background */
+        --card-background: #ffffff;
+        --text-dark: #1f2937; /* Dark gray for text */
+        --text-muted: #6b7280; /* Muted text */
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --border-radius: 8px;
+        --transition: all 0.2s ease-in-out;
+    }
+
+    /* Container */
+    .container-fluid {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: var(--border-radius);
+    }
+
+    /* Card Styling */
+    .card {
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-header {
+        background: var(--card-background);
+        border-bottom: 1px solid #e5e7eb;
+        padding: 1.25rem;
+    }
+
+        .card-header h6 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Form Styling */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+    .form-control {
+        border-radius: var(--border-radius);
+        border: 1px solid #d1d5db;
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        color: var(--text-dark);
+        transition: var(--transition);
+    }
+
+        .form-control[readonly] {
+            background: #e5e7eb;
+            cursor: not-allowed;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+    .text-danger {
+        font-size: 0.75rem;
+        color: #dc2626;
+        margin-top: 0.25rem;
+    }
+
+    /* Custom Switch */
+    .custom-switch .custom-control-label {
+        font-size: 0.875rem;
+        color: var(--text-dark);
+        font-weight: 500;
+    }
+
+    .custom-switch .custom-control-input:checked ~ .custom-control-label::before {
+        background: #16a34a;
+        border-color: #16a34a;
+    }
+
+    .custom-switch .custom-control-input {
+        cursor: pointer;
+    }
+
+    /* Button Styling */
+    .btn {
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary {
+        background: var(--accent-color);
+        border: none;
+        color: #fff;
+    }
+
+        .btn-primary:hover {
+            background: #d97706; /* Darker amber */
+            transform: translateY(-2px);
+        }
+
+    .btn-secondary {
+        background: transparent;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .container-fluid
+
+    {
+        padding: 1rem;
+    }
+
+    .card-header h6 {
+        font-size: 1.125rem;
+    }
+
+    .form-group label {
+        font-size: 0.75rem;
+    }
+
+    .form-control {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-group .btn + .btn {
+        margin-top: 0.5rem;
+    }
+
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h6><i class="fas fa-ticket-alt"></i> Chỉnh sửa mã giảm giá</h6>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" id="couponForm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="Code" class="control-label">Mã giảm giá</label>
+                    <input asp-for="Code" class="form-control" readonly />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DiscountPercentage" class="control-label">Phần trăm giảm</label>
+                    <input asp-for="DiscountPercentage" class="form-control" type="number" min="0" max="100" step="0.01" />
+                    <span asp-validation-for="DiscountPercentage" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ExpiryDate" class="control-label">Ngày hết hạn</label>
+                    <input asp-for="ExpiryDate" class="form-control" type="date" />
+                    <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">Mô tả</label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="UsageLimit" class="control-label">Giới hạn sử dụng</label>
+                    <input asp-for="UsageLimit" class="form-control" type="number" min="1" />
+                    <span asp-validation-for="UsageLimit" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="MinimumOrderAmount" class="control-label">Giá trị tối thiểu</label>
+                    <input asp-for="MinimumOrderAmount" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="MinimumOrderAmount" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" asp-for="IsActive" id="IsActive">
+                        <label class="custom-control-label" for="IsActive">Trạng thái hoạt động</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+                    <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // Set minimum date for expiry date
+            var today = new Date().toISOString().split('T')[0];
+            $('#ExpiryDate').attr('min', today);
+
+            // Handle form submission
+            $('#couponForm').submit(function (e) {
+                e.preventDefault();
+
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(function () {
+                                    window.location.href = '@Url.Action("Index")';
+                                }, 1500);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Đã xảy ra lỗi khi cập nhật mã giảm giá');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

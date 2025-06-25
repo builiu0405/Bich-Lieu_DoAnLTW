@@ -1,0 +1,275 @@
+﻿@model IEnumerable<DoAnLTW.Models.Product>
+
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    /* Root Variables for Consistent Theming */
+    :root {
+        --primary-color: #2563eb; /* Soft blue */
+        --accent-color: #f59e0b; /* Warm amber */
+        --background-color: #f3f4f6; /* Light gray background */
+        --card-background: #ffffff;
+        --text-dark: #1f2937; /* Dark gray for text */
+        --text-muted: #6b7280; /* Muted text */
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --border-radius: 8px;
+        --transition: all 0.2s ease-in-out;
+    }
+
+    /* Product Form Container */
+    .product-form-container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: var(--border-radius);
+    }
+
+    /* Product Form Header */
+    .product-form-header {
+        font-size: 1.875rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 0.5rem;
+    }
+
+    .add-product-btn {
+        background: var(--accent-color);
+        border: none;
+        color: #fff;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+    }
+
+        .add-product-btn:hover {
+            background: #d97706; /* Darker amber */
+            transform: translateY(-2px);
+        }
+
+    /* Product Table */
+    .product-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+        .product-table thead th {
+            background: #f9fafb;
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .product-table tbody tr {
+            transition: var(--transition);
+        }
+
+            .product-table tbody tr:hover {
+                background: #f0f7ff;
+            }
+
+        .product-table tbody td {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .product-table .text-primary {
+            font-weight: 600;
+            color: var(--primary-color) !important;
+        }
+
+        .product-table .product-form-btn {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .product-table .btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            border: 1px solid;
+            transition: var(--transition);
+        }
+
+        .product-table .view-btn {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+            .product-table .view-btn:hover {
+                background: var(--primary-color);
+                color: #fff;
+            }
+
+        .product-table .edit-btn {
+            color: #16a34a;
+            border-color: #16a34a;
+        }
+
+            .product-table .edit-btn:hover {
+                background: #16a34a;
+                color: #fff;
+            }
+
+        .product-table .delete-btn {
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+
+            .product-table .delete-btn:hover {
+                background: #dc2626;
+                color: #fff;
+            }
+
+        .product-table .text-muted {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .product-form-container
+
+    {
+        padding: 1rem;
+    }
+
+    .product-form-header {
+        font-size: 1.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .add-product-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .product-table thead {
+        display: none; /* Hide headers on small screens */
+    }
+
+    .product-table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: var(--border-radius);
+    }
+
+    .product-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        border-bottom: none;
+    }
+
+        .product-table tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--text-muted);
+            width: 40%;
+        }
+
+    .product-table .product-form-btn {
+        justify-content: flex-end;
+    }
+
+    }
+</style>
+
+<div class="product-form-container">
+    <div class="product-form-header">
+        <span>📋 Quản lý sản phẩm</span>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-area="Admin" asp-controller="Product" asp-action="Add" class="btn add-product-btn">
+                <i class="fas fa-plus"></i> Thêm sản phẩm
+            </a>
+        }
+    </div>
+
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Phần trăm khuyến mãi</th>
+                <th>Số lượng</th>
+                <th>Danh mục</th>
+                <th>Thương hiệu</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td data-label="Tên sản phẩm">@product.Name</td>
+                        <td data-label="Giá" class="text-primary">@product.Price.ToString("N0") VNĐ</td>
+                        <td data-label="Phần trăm khuyến mãi">@(product.Discount.HasValue? product.Discount.Value.ToString("N0") + "%" : "Không có")</td>
+                        <td data-label="Số lượng">@product.Stock</td>
+                        <td data-label="Danh mục">@(product.Category?.Name ?? "Chưa có")</td>
+                        <td data-label="Thương hiệu">@(product.Brand?.Name ?? "Chưa có")</td>
+                        <td data-label="Thao tác" class="product-form-btn">
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Display" asp-route-id="@product.Id" class="btn view-btn" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn edit-btn" title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-area="Admin" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" class="btn delete-btn" title="Xóa sản phẩm">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            }
+                            else if (User.IsInRole("Employee"))
+                            {
+                                <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@product.Id" class="btn edit-btn" title="Cập nhật">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-muted">Không có sản phẩm nào.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

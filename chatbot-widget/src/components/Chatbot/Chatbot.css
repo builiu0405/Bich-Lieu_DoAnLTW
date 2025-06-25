@@ -1,0 +1,149 @@
+﻿/* src/components/Chatbot.css */
+
+.chatbot-container {
+    width: 400px; /* Tăng chiều rộng lên một chút */
+    height: 550px; /* Tăng chiều cao lên một chút */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    position: fixed; /* Cố định ở góc */
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000; /* Đảm bảo chatbot hiển thị trên các phần tử khác */
+    /* transition: all 0.3s ease-in-out; */ /* Có thể thêm transition nếu muốn hiệu ứng mượt mà */
+}
+
+.chatbot-header {
+    background-color: #f8f8f8;
+    padding: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    text-align: center;
+    display: flex; /* Để căn chỉnh nút đóng */
+    justify-content: space-between; /* Đẩy tiêu đề và nút ra xa nhau */
+    align-items: center;
+}
+
+.chatbot-close-button { /* Nút đóng chatbot */
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: #888;
+    padding: 0 5px;
+}
+
+    .chatbot-close-button:hover {
+        color: #333;
+    }
+
+.chatbot-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Khoảng cách giữa các tin nhắn */
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 80%;
+    word-wrap: break-word; /* Đảm bảo tin nhắn không tràn */
+}
+
+    .message.user {
+        align-self: flex-end; /* Tin nhắn của người dùng nằm bên phải */
+        background-color: #007bff;
+        color: white;
+        border-bottom-right-radius: 5px; /* Bo góc ít hơn ở phía gần input */
+    }
+
+    .message.bot {
+        align-self: flex-start; /* Tin nhắn của bot nằm bên trái */
+        background-color: #e0e0e0;
+        color: #333;
+        border-bottom-left-radius: 5px; /* Bo góc ít hơn ở phía gần input */
+    }
+
+.chatbot-input-area {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+}
+
+    .chatbot-input-area input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        outline: none;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+    .chatbot-input-area button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s;
+    }
+
+        .chatbot-input-area button:hover {
+            background-color: #218838;
+        }
+
+/* KIỂU CHO NÚT MỞ CHATBOT MỚI */
+.chatbot-toggle-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1001;
+    background-color: #007bff; /* Màu xanh nổi bật */
+    color: white;
+    border: none;
+    border-radius: 30px; /* Bo góc để tạo hình bầu dục/pill shape */
+    padding: 10px 20px; /* Đệm để nút rộng hơn */
+    display: flex;
+    align-items: center; /* Căn giữa icon và chữ theo chiều dọc */
+    gap: 8px; /* Khoảng cách giữa icon và chữ */
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+    .chatbot-toggle-button:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px); /* Nhấc nút lên một chút khi hover */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); /* Đổ bóng đậm hơn */
+    }
+
+.chatbot-icon {
+    font-size: 20px; /* Kích thước icon */
+    line-height: 1; /* Đảm bảo icon không bị lệch */
+}
+
+.chatbot-label {
+    font-size: 16px; /* Kích thước chữ "Hỗ trợ" */
+    font-weight: bold;
+    color: white; /* Chữ màu trắng */
+}
+
+/* Đảm bảo chatbot-widget không làm ảnh hưởng đến layout chính */
+.chatbot-widget {
+    /* Không cần kiểu dáng phức tạp ở đây, nó chỉ là một wrapper */
+    /* Các thành phần con (button và chatbot-container) sẽ dùng position: fixed */
+}

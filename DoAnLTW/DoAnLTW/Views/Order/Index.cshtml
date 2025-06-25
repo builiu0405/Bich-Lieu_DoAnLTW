@@ -1,0 +1,102 @@
+﻿@model IEnumerable<DoAnLTW.Models.Order>
+
+@{
+    ViewData["Title"] = "Đơn hàng của tôi";
+    Layout = "_LayoutProduct";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 d-flex align-items-center">
+        <i class="fas fa-list me-2" style="color: #FF8C00;"></i> Đơn hàng của tôi
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-shopping-bag fa-3x mb-3 text-muted"></i>
+                <h3 class="mb-2">Chưa có đơn hàng nào</h3>
+                <p class="text-muted mb-4">Bạn chưa đặt đơn hàng nào. Hãy bắt đầu mua sắm!</p>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-primary rounded-pill px-4 py-2">
+                    <i class="fas fa-shopping-bag me-2"></i> Mua sắm ngay
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var order in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-dark">Đơn hàng #@order.Id</h5>
+                            <span class="badge @(order.Status == OrderStatus.Pending ? "bg-warning" :
+                                                                                order.Status == OrderStatus.Processing ? "bg-info" :
+                                                                                order.Status == OrderStatus.Shipped ? "bg-primary" :
+                                                                                order.Status == OrderStatus.Delivered ? "bg-success" :
+                                                                                "bg-danger") text-white">
+                        @order.Status.ToString()
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3 text-muted">
+                        <span>Ngày đặt:</span>
+                        <span>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+
+                            <div class="order-items mb-3">
+                        @if (order.OrderDetails != null && order.OrderDetails.Any())
+                                {
+                                    @foreach (var detail in order.OrderDetails.Take(2))
+                                    {
+                                        <div class="d-flex align-items-center mb-2">
+                                            <img src="@detail.Product?.ImageUrl" alt="@detail.Product?.Name"
+                                                 class="img-thumbnail me-2" style="width: 40px; height: 40px; object-fit: cover;" loading="lazy">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-0 text-dark">@detail.Product?.Name</h6>
+                                                <small class="text-muted">Số lượng: @detail.Quantity</small>
+                                            </div>
+                                            <span class="text-primary">@detail.Subtotal?.ToString("N0")đ</span>
+                                        </div>
+                                    }
+
+                                    @if (order.OrderDetails.Count > 2)
+                                    {
+                                        <div class="text-center">
+                                            <small class="text-muted">+ @(order.OrderDetails.Count - 2) sản phẩm khác</small>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Không có sản phẩm nào trong đơn hàng.</p>
+                                }
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted">Tổng cộng:</small>
+                                    <h5 class="mb-0 text-primary">@order.FinalAmount?.ToString("N0")đ</h5>
+                                </div>
+                                <div>
+                                    <a asp-action="Display" asp-route-orderId="@order.Id" class="btn btn-outline-primary rounded-pill px-3 py-2 me-2">
+                                        <i class="fas fa-eye me-1"></i> Chi tiết
+                                    </a>
+                                    @if (order.Status == OrderStatus.Pending)
+                                    {
+                                        <a asp-action="CancelOrder" asp-route-orderId="@order.Id" class="btn btn-outline-danger rounded-pill px-3 py-2"
+                                           style="border-color: #FF8C00; color: #FF8C00;">
+                                            <i class="fas fa-times-circle me-1"></i> Hủy đơn
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

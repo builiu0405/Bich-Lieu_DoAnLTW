@@ -1,0 +1,211 @@
+﻿@model DoAnLTW.Models.Category
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Xóa danh mục";
+}
+
+<link rel="stylesheet" href="~/css/categoryView.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/button.css" asp-append-version="true" />
+
+<style>
+    /* Root Variables for Consistent Theming */
+    :root {
+        --primary-color: #2563eb; /* Soft blue */
+        --accent-color: #f59e0b; /* Warm amber */
+        --background-color: #f3f4f6; /* Light gray background */
+        --card-background: #ffffff;
+        --text-dark: #1f2937; /* Dark gray for text */
+        --text-muted: #6b7280; /* Muted text */
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --border-radius: 10px;
+        --transition: all 0.3s ease-in-out;
+    }
+
+    /* Container */
+    .admin-container {
+        max-width: 800px; /* Compact for confirmation */
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: var(--border-radius);
+    }
+
+    /* Card Styling */
+    .card {
+        background: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+    .card-header {
+        background: var(--card-background);
+        border-bottom: 1px solid #e5e7eb;
+        padding: 1rem;
+    }
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Confirmation Message */
+    .confirmation-message {
+        font-size: 1rem;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+    }
+
+        .confirmation-message strong {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+    /* Form Styling */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .text-danger {
+        font-size: 0.8rem;
+        color: #dc2626;
+        margin-top: 0.3rem;
+        display: block;
+    }
+
+    /* Button Styling */
+    .btn {
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 0.6rem 1.5rem;
+        border-radius: 20px;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .remove-btn {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        border: none;
+        color: #fff;
+    }
+
+        .remove-btn:hover {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    .cancel-btn {
+        background: transparent;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+        .cancel-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .admin-container
+
+    {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .card-header h2 {
+        font-size: 1.125rem;
+    }
+
+    .confirmation-message {
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-group .btn + .btn {
+        margin-top: 0.5rem;
+    }
+
+    }
+</style>
+
+<div class="admin-container">
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-trash-alt"></i> Xóa danh mục</h2>
+        </div>
+        <div class="card-body">
+            <form asp-action="DeleteConfirmed" method="post" id="categoryDeleteForm">
+                <input type="hidden" asp-for="Id" />
+                <p class="confirmation-message">Bạn có muốn xóa <strong>@Model.Name</strong> khỏi danh mục?</p>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger remove-btn"><i class="fas fa-trash"></i> Xóa</button>
+                    <a asp-action="Index" class="btn cancel-btn"><i class="fas fa-times"></i> Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // Handle form submission
+            $('#categoryDeleteForm').submit(function (e) {
+                e.preventDefault();
+
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(function () {
+                                    window.location.href = '@Url.Action("Index")';
+                                }, 1500);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Đã xảy ra lỗi khi xóa danh mục');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,406 @@
+﻿@using DoAnLTW.Extensions
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FastFood Delight</title>
+    <link rel="stylesheet" href="~/css/Login_Register.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" type="image/x-icon">
+    <style>
+       
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #FFF3E0;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-main {
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #EEEEEE;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+            .header-main .logo img {
+                height: 60px;
+            }
+
+        .user-options {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-icon {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            background-color: #D32F2F;
+            color: #FFFFFF;
+            border-radius: 25px;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            .cart-icon:hover {
+                background-color: #C62828;
+                transform: translateY(-2px);
+            }
+
+            .cart-icon .cart-count {
+                background-color: #FFFFFF;
+                color: #D32F2F;
+                border-radius: 50%;
+                width: 25px;
+                height: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 8px;
+                font-size: 0.9rem;
+                font-weight: bold;
+            }
+
+        .main-content {
+            padding: 20px 0;
+        }
+
+        .about-us {
+            background-color: #FFF3E0;
+            padding: 40px 20px;
+            margin-bottom: 0;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .about-text h2 {
+            color: #D32F2F;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .about-text p {
+            font-size: 1rem;
+            color: #555555;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .feature {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+            .feature i {
+                font-size: 2rem;
+                color: #D32F2F;
+                margin-bottom: 10px;
+            }
+
+            .feature h3 {
+                font-size: 1.2rem;
+                margin-bottom: 5px;
+            }
+
+            .feature p {
+                font-size: 0.9rem;
+                color: #777777;
+            }
+
+        .about-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .footer {
+            background-color: #FFAB91;
+            color: #333333;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-column h4 {
+            color: #D32F2F;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .footer-column p {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-column i {
+            margin-right: 8px;
+            color: #D32F2F;
+        }
+
+        media (max-width: 768px) {
+            .header-main
+
+        {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .header-main .logo {
+            order: 1;
+            flex-basis: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .user-options {
+            order: 2;
+            margin-top: 10px;
+            justify-content: center;
+            flex-basis: 100%;
+        }
+
+        .about-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .features {
+            justify-content: center;
+        }
+
+        .footer {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-column {
+            flex-basis: 90%;
+            margin-bottom: 15px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <section class="header-main">
+            <div class="logo">
+                <a asp-controller="Home" asp-action="Index" asp-route-area=""><img src="@Url.Content("~/images/logo-fastfood.png")" alt="FastFood Delight Logo" loading="lazy"></a>
+            </div>
+            <div class="user-options">
+                <a href="/ShoppingCart/Index" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> <span class="cart-count">@((Context.Session.GetObjectFromJson<ShoppingCart>("Cart")?.Items.Count ?? 0))</span>
+                </a>
+                <partial name="_LoginPartial" />
+            </div>
+        </section>
+    </header>
+    <!-- Main Layout -->
+    <div class="container main-content">
+        <!-- Main Content -->
+        <main class="content">
+            @RenderBody()
+        </main>
+        <!-- Banner giới thiệu -->
+        <div class="main-slider">
+            <div class="slider-wrapper">
+                <!-- Slide Giới thiệu -->
+                <div class="slide active intro-slide">
+                    <div class="intro-content">
+                        <h2>Chào mừng đến với FastFood Delight</h2>
+                    </div>
+                </div>
+                <!-- Các banner -->
+                <div class="slide">
+                    <img src="@Url.Content("~/images/banner-pizza.jpg")" alt="Khuyến mãi đồ ăn" loading="lazy">
+                    <div class="slide-caption">
+                        <h2>Khuyến mãi cực lớn!</h2>
+                        <p>Mua ngay combo đồ ăn với giá siêu hấp dẫn.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="@Url.Content("~/images/banner-burger.jpg")" alt="Sản phẩm mới" loading="lazy">
+                    <div class="slide-caption">
+                        <h2>Thực đơn mới nhất</h2>
+                        <p>Khám phá các món ăn ngon, nóng hổi.</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="@Url.Content("~/images/banner-friedchicken.jpg")" alt="Ưu đãi hấp dẫn" loading="lazy">
+                    <div class="slide-caption">
+                        <h2>Ưu đãi hấp dẫn</h2>
+                        <p>Nhận ngay giảm giá khi đặt hàng hôm nay!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút điều hướng -->
+            <div class="slider-nav">
+                <button id="prevBtn">❮</button>
+                <button id="nextBtn">❯</button>
+            </div>
+
+            <!-- Chấm nhỏ (dots) -->
+            <div class="slider-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+                <span class="dot" data-index="3"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Us Section -->
+    <section class="about-us">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Về chúng tôi</h2>
+                <p>FastFood Delight là nơi mang đến những bữa ăn ngon, nhanh chóng với nguyên liệu tươi ngon. Đội ngũ của chúng tôi cam kết phục vụ bạn với sự tận tâm và chuyên nghiệp nhất.</p>
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-truck"></i>
+                        <h3>Giao hàng nhanh chóng</h3>
+                        <p>Giao hàng trong 30 phút tại nội thành</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Chất lượng đảm bảo</h3>
+                        <p>Nguyên liệu tươi sống mỗi ngày</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-headset"></i>
+                        <h3>Hỗ trợ 24/7</h3>
+                        <p>Đội ngũ tư vấn luôn sẵn sàng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <img src="@Url.Content("~/images/about-us-food.jpg")" alt="Về FastFood Delight" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-column">
+            <h4>Thông tin liên hệ</h4>
+            <p><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận XYZ, TP.HCM</p>
+            <p><i class="fas fa-phone-alt"></i> 1900.8888</p>
+            <p><i class="fas fa-envelope"></i> info@fastfooddelight.com</p>
+        </div>
+        <div class="footer-column">
+            <h4>Giờ mở cửa</h4>
+            <p><i class="fas fa-clock"></i> Thứ 2 - Thứ 6: 09:00 - 22:00</p>
+            <p><i class="fas fa-clock"></i> Thứ 7 - Chủ nhật: 10:00 - 23:00</p>
+        </div>
+        <div class="footer-column">
+            <h4>Theo dõi chúng tôi</h4>
+            <p><i class="fab fa-facebook"></i> Facebook</p>
+            <p><i class="fab fa-instagram"></i> Instagram</p>
+            <p><i class="fab fa-twitter"></i> Twitter</p>
+        </div>
+    </footer>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Banner
+        const slides = document.querySelectorAll(".main-slider .slide");
+        const dots = document.querySelectorAll(".slider-dots .dot");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        let currentIndex = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove("active");
+                dots[i].classList.remove("active");
+            });
+            slides[index].classList.add("active");
+            dots[index].classList.add("active");
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopAutoSlide() {
+            clearInterval(slideInterval);
+        }
+
+        prevBtn.addEventListener("click", function () {
+            prevSlide();
+            stopAutoSlide();
+            startAutoSlide();
+        });
+
+        nextBtn.addEventListener("click", function () {
+            nextSlide();
+            stopAutoSlide();
+            startAutoSlide();
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener("click", function () {
+                currentIndex = index;
+                showSlide(currentIndex);
+                stopAutoSlide();
+                startAutoSlide();
+            });
+        });
+
+        showSlide(currentIndex);
+        startAutoSlide();
+    });
+</script>

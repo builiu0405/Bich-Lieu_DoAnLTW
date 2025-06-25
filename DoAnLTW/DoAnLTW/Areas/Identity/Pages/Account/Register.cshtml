@@ -1,0 +1,64 @@
+﻿@page
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Đăng ký";
+    Layout = "_LayoutAuth";
+}
+
+<div class="register-container">
+    <div class="register-card shadow-sm">
+        <h2 class="register-header text-center mb-4" style="color: #FF8C00;">Tạo tài khoản tại FastFood Delight</h2>
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="register-form">
+            <div asp-validation-summary="ModelOnly" class="error-message text-danger text-center mb-3"></div>
+
+            <div class="register-form-group mb-3">
+                <label asp-for="Input.FullName" class="register-label form-label">Họ và tên</label>
+                <input asp-for="Input.FullName" class="register-input form-control" autocomplete="FullName" aria-required="true" placeholder="Nhập họ và tên" />
+                <span asp-validation-for="Input.FullName" class="error-message text-danger"></span>
+            </div>
+
+            <div class="register-form-group mb-3">
+                <label asp-for="Input.Address" class="register-label form-label">Địa chỉ</label>
+                <input asp-for="Input.Address" class="register-input form-control" autocomplete="Address" aria-required="true" placeholder="Nhập địa chỉ giao hàng" />
+                <span asp-validation-for="Input.Address" class="error-message text-danger"></span>
+            </div>
+
+            <div class="register-form-group mb-3">
+                <label asp-for="Input.PhoneNumber" class="register-label form-label">Số điện thoại</label>
+                <input asp-for="Input.PhoneNumber" class="register-input form-control" autocomplete="PhoneNumber" aria-required="true" placeholder="Nhập số điện thoại" />
+                <span asp-validation-for="Input.PhoneNumber" class="error-message text-danger"></span>
+            </div>
+
+            <div class="register-form-group mb-3">
+                <label asp-for="Input.Email" class="register-label form-label">Email</label>
+                <input asp-for="Input.Email" class="register-input form-control" autocomplete="username" aria-required="true" placeholder="Nhập email" />
+                <span asp-validation-for="Input.Email" class="error-message text-danger"></span>
+            </div>
+
+            <div class="register-form-group mb-3">
+                <label asp-for="Input.Password" class="register-label form-label">Mật khẩu</label>
+                <input asp-for="Input.Password" type="password" class="register-input form-control" autocomplete="new-password" aria-required="true" placeholder="Nhập mật khẩu" />
+                <span asp-validation-for="Input.Password" class="error-message text-danger"></span>
+            </div>
+
+            <div class="register-form-group mb-4">
+                <label asp-for="Input.ConfirmPassword" class="register-label form-label">Xác nhận mật khẩu</label>
+                <input asp-for="Input.ConfirmPassword" type="password" class="register-input form-control" autocomplete="new-password" aria-required="true" placeholder="Nhập lại mật khẩu" />
+                <span asp-validation-for="Input.ConfirmPassword" class="error-message text-danger"></span>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="register-button btn btn-primary w-100 rounded-pill py-2" style="background-color: #FF8C00; border-color: #FF8C00;">
+                <i class="fas fa-user-plus me-2"></i> Đăng ký
+            </button>
+
+            <div class="register-links text-center mt-3">
+                <p>Đã có tài khoản? <a asp-page="./Login" class="text-decoration-none text-primary">Đăng nhập ngay</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

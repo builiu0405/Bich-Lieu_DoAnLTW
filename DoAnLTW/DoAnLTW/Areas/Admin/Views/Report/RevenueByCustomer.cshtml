@@ -1,0 +1,28 @@
+﻿@model IEnumerable<dynamic>
+<h2 class="mb-4">Thống kê doanh thu theo khách hàng</h2>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tài khoản</th>
+            <th>Họ tên</th>
+            <th>Số đơn hàng</th>
+            <th>Tổng doanh thu</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int stt = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(stt++)</td>
+                    <td>@item.UserName</td>
+                    <td>@item.FullName</td>
+                    <td>@item.OrderCount</td>
+                    <td class="text-danger fw-bold">@item.TotalRevenue.ToString("N0") ₫</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
